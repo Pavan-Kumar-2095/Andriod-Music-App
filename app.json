@@ -17,17 +17,14 @@
       }
     },
     "android": {
-      "permissions": [
-        "FOREGROUND_SERVICE",
-        "FOREGROUND_SERVICE"
-      ],
+      "package": "com.anonymous.mobileapp",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#E6F4FE"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.mobileapp"
+      "predictiveBackGestureEnabled": false
     },
     "web": {
       "output": "static",
@@ -42,7 +39,8 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "expo-asset"
     ],
     "experiments": {
       "typedRoutes": true,
@@ -51,8 +49,9 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "721c356f-fc91-4cae-9983-ea838b4130a6"
+        "projectId": "89628e76-6a53-4519-a81d-5377763fac76"
       }
-    }
+    },
+    "owner": "wade7077"
   }
 }
