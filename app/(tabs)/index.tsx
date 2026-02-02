@@ -55,12 +55,6 @@ export default function SpotifyPlayer() {
     },
   ]);
 
-  useEffect(() => {
-    UpdateTracks();
-    setShouldAutoPlayNext(true);
-  }, []);
-
-
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [player, setPlayer] = useState<AudioPlayerType | null>(null);
 
