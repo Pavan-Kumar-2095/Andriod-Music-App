@@ -1,10 +1,14 @@
-import { Entypo, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Entypo, Ionicons } from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
 import { useAudioPlayer } from "expo-audio";
+import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { supabase } from "./supabaseClient.js";
-import { useLocalSearchParams } from "expo-router";
+import { supabase } from "../../lib/supabaseClient.js";
+
+import Constants from "expo-constants";
+
+console.log("EXTRA:", Constants.expoConfig?.extra);
 
 type AudioPlayerType = {
   play: () => void;
@@ -15,8 +19,10 @@ type AudioPlayerType = {
   duration?: number;
 };
 
-
-function AudioPlayerInstance({uri,onReady,}: {
+function AudioPlayerInstance({
+  uri,
+  onReady,
+}: {
   uri: string;
   onReady: (player: AudioPlayerType) => void;
 }) {
@@ -32,15 +38,13 @@ function AudioPlayerInstance({uri,onReady,}: {
   return null;
 }
 
-
 export default function SpotifyPlayer() {
-  const { SongName, SongURL, ArtistName, SongImage } =
-    useLocalSearchParams<{
-      SongName?: string;
-      SongURL?: string;
-      ArtistName?: string;
-      SongImage?: string;
-    }>();
+  const { SongName, SongURL, ArtistName, SongImage } = useLocalSearchParams<{
+    SongName?: string;
+    SongURL?: string;
+    ArtistName?: string;
+    SongImage?: string;
+  }>();
 
   const [tracks, setTracks] = useState([
     {
@@ -63,9 +67,7 @@ export default function SpotifyPlayer() {
   const [isLooping, setIsLooping] = useState(false);
 
   const currentTrack = tracks[currentTrackIndex];
-  
 
-  
   useEffect(() => {
     if (!SongURL) return;
 
@@ -78,10 +80,9 @@ export default function SpotifyPlayer() {
       },
     ]);
     setCurrentTrackIndex(0);
-    setShouldAutoPlayNext(true)
+    setShouldAutoPlayNext(true);
   }, [SongURL]);
 
-  
   useEffect(() => {
     setIsPlaying(false);
     setIsReady(false);
@@ -90,7 +91,6 @@ export default function SpotifyPlayer() {
     setIsLooping(false);
   }, [currentTrack.uri]);
 
-  
   useEffect(() => {
     if (!player) return;
 
@@ -99,15 +99,10 @@ export default function SpotifyPlayer() {
         setPosition(player.currentTime);
       }
 
-      if (
-        player.duration !== undefined &&
-        player.duration > 0 &&
-        !isReady
-      ) {
+      if (player.duration !== undefined && player.duration > 0 && !isReady) {
         setDuration(player.duration);
         setIsReady(true);
 
-        
         if (shouldAutoPlayNext) {
           player.play();
           setIsPlaying(true);
@@ -134,45 +129,39 @@ export default function SpotifyPlayer() {
     return () => clearInterval(interval);
   }, [player, isReady, isLooping, shouldAutoPlayNext, currentTrackIndex]);
 
-
-  
-  
   const UpdateTracks = async () => {
+    let count = 5;
 
-  let count = 5;
+    const { count: fetchedCount, error: countError } = await supabase
+      .from("MusicApp")
+      .select("*", { count: "exact", head: true });
 
+    if (!countError && fetchedCount !== null) {
+      count = fetchedCount;
+    }
 
-  const { count: fetchedCount, error: countError } = await supabase
-    .from("MusicApp")
-    .select("*", { count: "exact", head: true });
+    const randomOffset = Math.floor(Math.random() * (count - 2));
 
-  if (!countError && fetchedCount !== null) {
-    count = fetchedCount;
-  }
-  
-  const randomOffset = Math.floor(Math.random() * (count - 2));
+    const { data, error } = await supabase
+      .from("MusicApp")
+      .select("*")
+      .range(randomOffset, randomOffset + 2);
 
-  const { data, error } = await supabase
-    .from("MusicApp")
-    .select("*")
-    .range(randomOffset, randomOffset + 2);
+    if (error || !data?.length) {
+      console.error(error);
+      return;
+    }
 
-  if (error || !data?.length) {
-    console.error(error);
-    return;
-  }
+    const formatted = data.map((t) => ({
+      title: t.SongName,
+      artist: t.ArtistName,
+      artwork: t.SongImage,
+      uri: t.SongURL,
+    }));
 
-  const formatted = data.map((t) => ({
-    title: t.SongName,
-    artist: t.ArtistName,
-    artwork: t.SongImage,
-    uri: t.SongURL,
-  }));
-
-  setTracks(formatted);
-  setCurrentTrackIndex(0);
-};
-
+    setTracks(formatted);
+    setCurrentTrackIndex(0);
+  };
 
   /* -------- CONTROLS -------- */
   const togglePlayPause = () => {
@@ -188,7 +177,7 @@ export default function SpotifyPlayer() {
   };
 
   const nextTrack = () => {
-    setShouldAutoPlayNext(true); 
+    setShouldAutoPlayNext(true);
     if (currentTrackIndex + 1 < tracks.length) {
       setCurrentTrackIndex((i) => i + 1);
     } else {
@@ -197,7 +186,7 @@ export default function SpotifyPlayer() {
   };
 
   const previousTrack = () => {
-    setShouldAutoPlayNext(true); 
+    setShouldAutoPlayNext(true);
     if (currentTrackIndex - 1 >= 0) {
       setCurrentTrackIndex((i) => i - 1);
     }
@@ -209,7 +198,6 @@ export default function SpotifyPlayer() {
     player.seekTo?.(value);
   };
 
-  
   return (
     <View style={styles.container}>
       <AudioPlayerInstance
@@ -264,7 +252,6 @@ export default function SpotifyPlayer() {
   );
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -303,23 +290,12 @@ const styles = StyleSheet.create({
   },
 });
 
-
-
-
-
-
-
-
-
-
-
 // import { Entypo, Ionicons, MaterialIcons } from "@expo/vector-icons";
 // import Slider from "@react-native-community/slider";
 // import { useAudioPlayer } from "expo-audio";
 // import React, { useEffect, useState } from "react";
 // import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 // import { supabase } from "./supabaseClient.js";
-
 
 // type AudioPlayerType = {
 //   play: () => void;
@@ -475,7 +451,6 @@ const styles = StyleSheet.create({
 //             <Entypo name="controller-next" size={24} color="#0affe6" />
 //           </TouchableOpacity>
 
-          
 //         </View>
 
 //         <Slider
@@ -499,14 +474,14 @@ const styles = StyleSheet.create({
 // const styles = StyleSheet.create({
 //   container: {
 //     flex: 1,
-//     backgroundColor: "#121212", 
+//     backgroundColor: "#121212",
 //     justifyContent: "center",
 //     alignItems: "center",
 //   },
 //   card: {
 //     width: 350,
 //     alignItems: "center",
-//     backgroundColor: "#1e1e1e", 
+//     backgroundColor: "#1e1e1e",
 //     padding: 25,
 //     borderRadius: 20,
 //     shadowColor: "#000",

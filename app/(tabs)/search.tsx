@@ -1,16 +1,16 @@
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
+import React, { useState } from "react";
 import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
+  ActivityIndicator,
   FlatList,
   Pressable,
-  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
 } from "react-native";
-import React, { useState } from "react";
-import { supabase } from "./supabaseClient";
-import { router } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
+import { supabase } from "../../lib/supabaseClient";
 
 const TINT = "#0affe6";
 
