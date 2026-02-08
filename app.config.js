@@ -12,7 +12,11 @@ export default {
     android: {
       package: "com.anonymous.mobileapp",
       versionCode: 1,
-      adaptiveIcon: { foregroundImage: "./assets/images/logo.png", backgroundColor: "#E6F4FE" }
+      permissions: ["FOREGROUND_SERVICE"], // 🔹 Required for background playback
+      adaptiveIcon: {
+        foregroundImage: "./assets/images/logo.png",
+        backgroundColor: "#E6F4FE"
+      }
     },
 
     plugins: [

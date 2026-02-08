@@ -46,6 +46,16 @@ export default function SpotifyPlayer() {
     SongImage?: string;
   }>();
 
+  const [carouselOptions, setCarouselOptions] = useState([
+    { id: 1, label: "*" },
+    { id: 2, label: "Kannada" },
+    { id: 3, label: "Telugu" },
+    { id: 4, label: "Hindi" },
+    { id: 5, label: "English" },
+  ]);
+
+  const [selectedOption, setSelectedOption] = useState<string>("*");
+
   const [tracks, setTracks] = useState([
     {
       title: "Kalimba",
@@ -69,20 +79,69 @@ export default function SpotifyPlayer() {
   const currentTrack = tracks[currentTrackIndex];
 
   useEffect(() => {
+    UpdateTracks();
+  }, []);
+
+  // ---------------------------
+  // Fetch 2 random tracks from Supabase
+  const fetchRandomTracks = async (language: string, limit = 2) => {
+    try {
+      let query = supabase.from("MusicApp").select("id");
+      if (language !== "*") query = query.eq("Language", language);
+
+      const { data: ids, error: idError } = await query;
+      if (idError || !ids?.length) return [];
+
+      const shuffledIds = ids.sort(() => Math.random() - 0.5)
+                             .slice(0, limit)
+                             .map(t => t.id);
+
+      const { data: tracksData, error: trackError } = await supabase
+        .from("MusicApp")
+        .select("*")
+        .in("id", shuffledIds);
+
+      if (trackError || !tracksData?.length) return [];
+
+      return tracksData.map(t => ({
+        title: t.SongName,
+        artist: t.ArtistName,
+        artwork: t.SongImage,
+        uri: t.SongURL,
+      }));
+    } catch (err) {
+      console.error("fetchRandomTracks failed:", err);
+      return [];
+    }
+  };
+
+  const UpdateTracks = async () => {
+    const newTracks = await fetchRandomTracks(selectedOption, 2);
+    if (newTracks.length > 0) {
+      setTracks(newTracks);
+      setCurrentTrackIndex(0);
+      setShouldAutoPlayNext(true);
+    } else {
+      console.log("No tracks available for this language.");
+    }
+  };
+
+  // ---------------------------
+  // Initialize tracks from search params
+  useEffect(() => {
     if (!SongURL) return;
 
-    setTracks([
-      {
-        title: SongName ?? "Unknown",
-        artist: ArtistName ?? "Unknown",
-        artwork: SongImage ?? "",
-        uri: SongURL,
-      },
-    ]);
+    setTracks([{
+      title: SongName ?? "Unknown",
+      artist: ArtistName ?? "Unknown",
+      artwork: SongImage ?? "",
+      uri: SongURL,
+    }]);
     setCurrentTrackIndex(0);
     setShouldAutoPlayNext(true);
   }, [SongURL]);
 
+  // Reset player state on track change
   useEffect(() => {
     setIsPlaying(false);
     setIsReady(false);
@@ -91,14 +150,13 @@ export default function SpotifyPlayer() {
     setIsLooping(false);
   }, [currentTrack.uri]);
 
+  // ---------------------------
+  // Track progress & auto-next
   useEffect(() => {
     if (!player) return;
 
     const interval = setInterval(() => {
-      if (player.currentTime !== undefined) {
-        setPosition(player.currentTime);
-      }
-
+      if (player.currentTime !== undefined) setPosition(player.currentTime);
       if (player.duration !== undefined && player.duration > 0 && !isReady) {
         setDuration(player.duration);
         setIsReady(true);
@@ -129,41 +187,8 @@ export default function SpotifyPlayer() {
     return () => clearInterval(interval);
   }, [player, isReady, isLooping, shouldAutoPlayNext, currentTrackIndex]);
 
-  const UpdateTracks = async () => {
-    let count = 5;
-
-    const { count: fetchedCount, error: countError } = await supabase
-      .from("MusicApp")
-      .select("*", { count: "exact", head: true });
-
-    if (!countError && fetchedCount !== null) {
-      count = fetchedCount;
-    }
-
-    const randomOffset = Math.floor(Math.random() * (count - 2));
-
-    const { data, error } = await supabase
-      .from("MusicApp")
-      .select("*")
-      .range(randomOffset, randomOffset + 2);
-
-    if (error || !data?.length) {
-      console.error(error);
-      return;
-    }
-
-    const formatted = data.map((t) => ({
-      title: t.SongName,
-      artist: t.ArtistName,
-      artwork: t.SongImage,
-      uri: t.SongURL,
-    }));
-
-    setTracks(formatted);
-    setCurrentTrackIndex(0);
-  };
-
-  /* -------- CONTROLS -------- */
+  // ---------------------------
+  // Controls
   const togglePlayPause = () => {
     if (!player || !isReady) return;
 
@@ -176,20 +201,18 @@ export default function SpotifyPlayer() {
     }
   };
 
-  const nextTrack = () => {
-    setShouldAutoPlayNext(true);
+  const nextTrack = async () => {
     if (currentTrackIndex + 1 < tracks.length) {
-      setCurrentTrackIndex((i) => i + 1);
+      setCurrentTrackIndex(i => i + 1);
+      setShouldAutoPlayNext(true);
     } else {
-      UpdateTracks();
+      await UpdateTracks();
     }
   };
 
   const previousTrack = () => {
     setShouldAutoPlayNext(true);
-    if (currentTrackIndex - 1 >= 0) {
-      setCurrentTrackIndex((i) => i - 1);
-    }
+    if (currentTrackIndex - 1 >= 0) setCurrentTrackIndex(i => i - 1);
   };
 
   const onSeek = (value: number) => {
@@ -198,6 +221,7 @@ export default function SpotifyPlayer() {
     player.seekTo?.(value);
   };
 
+  // ---------------------------
   return (
     <View style={styles.container}>
       <AudioPlayerInstance
@@ -205,6 +229,28 @@ export default function SpotifyPlayer() {
         uri={currentTrack.uri}
         onReady={setPlayer}
       />
+
+      <View style={styles.optionCarousel}>
+        {carouselOptions.map(option => (
+          <TouchableOpacity
+            key={option.id}
+            onPress={() => setSelectedOption(option.label)}
+            style={[
+              styles.optionItem,
+              selectedOption === option.label ? styles.optionItemSelected : {},
+            ]}
+          >
+            <Text
+              style={[
+                styles.optionText,
+                selectedOption === option.label ? styles.optionTextSelected : {},
+              ]}
+            >
+              {option.label}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
 
       <View style={styles.card}>
         <Image source={{ uri: currentTrack.artwork }} style={styles.artwork} />
@@ -288,7 +334,32 @@ const styles = StyleSheet.create({
     width: 250,
     marginTop: 10,
   },
+  optionCarousel: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  optionItem: {
+    paddingVertical: 4,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    backgroundColor: "#444",
+    marginHorizontal: 6,
+  },
+  optionItemSelected: {
+    backgroundColor: "#0affe6",
+  },
+  optionText: {
+    color: "#fff",
+    fontSize: 12,
+  },
+  optionTextSelected: {
+    color: "#111",
+    fontWeight: "bold",
+  },
 });
+
 
 // import { Entypo, Ionicons, MaterialIcons } from "@expo/vector-icons";
 // import Slider from "@react-native-community/slider";
