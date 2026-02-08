@@ -43,7 +43,7 @@ module.exports = {
     extra: {
       router: {},
       eas: {
-        projectId:"89628e76-6a53-4519-a81d-5377763fac76"
+        projectId:"449314a1-8e01-474c-8006-037d2eac90bd"
       },
       supabaseUrl: process.env.EXPO_PUBLIC_SUPABASE_URL,
       supabaseAnonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY
