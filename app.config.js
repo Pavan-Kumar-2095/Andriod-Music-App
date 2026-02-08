@@ -45,8 +45,8 @@ module.exports = {
       eas: {
         projectId:"449314a1-8e01-474c-8006-037d2eac90bd"
       },
-      supabaseUrl: process.env.EXPO_PUBLIC_SUPABASE_URL,
-      supabaseAnonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY
+      supabaseUrl:"https://pqsodsdarprppbvesfel.supabase.com",
+      supabaseAnonKey:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxc29kc2RhcnBycHBidmVzZmVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk3NTYzMDUsImV4cCI6MjA4NTMzMjMwNX0.veXsW-48V44QOXw2AJ8_O5zNrNXIundIPGbe4zM96ts"
     }
   }
 };
