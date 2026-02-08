@@ -16,7 +16,7 @@ module.exports = {
     },
 
     android: {
-      package: "com.pavankumar.raaga",
+      package: "com.pavankumar.raaga2",
       versionCode: 1,
       adaptiveIcon: {
         foregroundImage: "./assets/images/logo.png",
