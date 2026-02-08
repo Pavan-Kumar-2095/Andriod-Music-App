@@ -10,7 +10,7 @@ export default {
 
     ios: { supportsTablet: true, infoPlist: { UIBackgroundModes: ["audio"] } },
     android: {
-      package: "com.anonymous.mobileapp",
+      package: "com.anonymous.raaga",
       versionCode: 1,
       permissions: ["FOREGROUND_SERVICE"], // 🔹 Required for background playback
       adaptiveIcon: {
