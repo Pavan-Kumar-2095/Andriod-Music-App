@@ -16,7 +16,7 @@ module.exports = {
     },
 
     android: {
-      package: "com.pavankumar.raaga2",
+      package: "com.raaga.freemusicapp",
       versionCode: 1,
       adaptiveIcon: {
         foregroundImage: "./assets/images/logo.png",
@@ -43,7 +43,7 @@ module.exports = {
     extra: {
       router: {},
       eas: {
-        projectId:"449314a1-8e01-474c-8006-037d2eac90bd"
+        projectId:"0e09628a-bc96-45fb-9ea0-a414ed23d0af",
       },
       supabaseUrl:"https://pqsodsdarprppbvesfel.supabase.com",
       supabaseAnonKey:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxc29kc2RhcnBycHBidmVzZmVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk3NTYzMDUsImV4cCI6MjA4NTMzMjMwNX0.veXsW-48V44QOXw2AJ8_O5zNrNXIundIPGbe4zM96ts"
