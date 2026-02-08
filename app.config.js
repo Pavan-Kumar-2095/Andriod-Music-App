@@ -1,18 +1,29 @@
+import 'dotenv/config';
+
 export default {
   expo: {
     name: "Raaga",
     slug: "mobileapp",
     version: "1.0.0",
+    sdkVersion: "54.0.0",
+    platforms: ["ios", "android", "web"],
     orientation: "portrait",
     icon: "./assets/images/logo.png",
     scheme: "mobileapp",
     userInterfaceStyle: "automatic",
 
-    ios: { supportsTablet: true, infoPlist: { UIBackgroundModes: ["audio"] } },
+    ios: {
+      bundleIdentifier: "com.yourname.raaga.dev", // unique for dev/testing
+      supportsTablet: true,
+      infoPlist: {
+        UIBackgroundModes: ["audio"] // background music
+      }
+    },
+
     android: {
-      package: "com.anonymous.raaga",
+      package: "com.yourname.raaga.dev", // unique for dev/testing
       versionCode: 1,
-      permissions: ["FOREGROUND_SERVICE"], // 🔹 Required for background playback
+      permissions: ["FOREGROUND_SERVICE"], // background music
       adaptiveIcon: {
         foregroundImage: "./assets/images/logo.png",
         backgroundColor: "#E6F4FE"
@@ -34,12 +45,11 @@ export default {
     experiments: { typedRoutes: true },
 
     extra: {
-      router: {},
       eas: {
-        projectId: "89628e76-6a53-4519-a81d-5377763fac76"
+        projectId: process.env.EXPO_PUBLIC_EAS_PROJECT_ID
       },
-      supabaseUrl: "https://pqsodsdarprppbvesfel.supabase.co",
-      supabaseAnonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxc29kc2RhcnBycHBidmVzZmVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk3NTYzMDUsImV4cCI6MjA4NTMzMjMwNX0.veXsW-48V44QOXw2AJ8_O5zNrNXIundIPGbe4zM96ts"
+      supabaseUrl: process.env.EXPO_PUBLIC_SUPABASE_URL,
+      supabaseAnonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY
     }
   }
 };
