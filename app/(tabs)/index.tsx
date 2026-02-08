@@ -78,10 +78,6 @@ export default function SpotifyPlayer() {
 
   const currentTrack = tracks[currentTrackIndex];
 
-  useEffect(() => {
-    UpdateTracks();
-  }, []);
-
   // ---------------------------
   // Fetch 2 random tracks from Supabase
   const fetchRandomTracks = async (language: string, limit = 2) => {
