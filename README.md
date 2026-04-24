@@ -12,9 +12,9 @@ This project was built as an experimental mobile app to explore audio playback s
 <br/>
 
 <p align="center">
-  <img src="./assets/images/ScreenShot_1.jpeg" width="40%" />
+  <img src="./assets/images/ScreenShot_1.jpeg" width="30%" />
   &nbsp;&nbsp;&nbsp;
-  <img src="./assets/images/ScreenShot_2.jpeg" width="40%" />
+  <img src="./assets/images/ScreenShot_2.jpeg" width="30%" />
 </p>
 
 ---
