@@ -1,15 +1,14 @@
-# 🎧 Spotify-Style Music App (React Native + Expo)
+# Spotify-Style Music App (React Native + Expo)
 
-A personal music streaming app inspired by Spotify, built using **React Native + Expo**, designed for smooth playback, modern UI, and unlimited listening control.
+A personal music streaming application inspired by Spotify, built using **React Native** and **Expo**. The app is designed to provide smooth audio playback, a modern user interface, and an intuitive music listening experience.
 
-This project was built as an experimental mobile app to explore audio playback systems, backend integration, and UI design.
+This project was developed to explore mobile audio playback, backend integration, and responsive UI design.
 
 ---
-## 📸 Screenshots
 
-> A quick preview of the app interface and features.
+## Screenshots
 
-<br/>
+A preview of the application's interface.
 
 <p align="center">
   <img src="./assets/images/ScreenShot_1.jpeg" width="30%" />
@@ -19,62 +18,88 @@ This project was built as an experimental mobile app to explore audio playback s
 
 ---
 
-## 🚀 Overview
+# Overview
 
-A lightweight music player that allows users to stream songs seamlessly with a clean, Spotify-inspired interface.
+This lightweight music player enables users to stream songs through a clean, Spotify-inspired interface.
 
-Backend is powered by **Supabase (BaaS)** which handles dynamic music data and metadata management.
-
----
-
-## 🧠 Backend (Supabase)
-
-Supabase handles:
-
-- 🎵 Dynamic fetching of tracks
-- 🗂️ Song metadata storage (title, artist, artwork, URL)
-- 🔁 Track navigation support (next/previous)
-- ⚡ Real-time data sync for playback
+The backend is powered by **Supabase**, which manages music data, metadata, and track information.
 
 ---
 
-## 📱 Frontend Features (React Native + Expo)
+# Backend (Supabase)
 
-### 🎶 Music Player
-- Play / Pause functionality
-- Seek (scrubbing through track)
-- Loop mode for repeating songs
-- Auto-play next track
+Supabase is used for:
 
-### ⏭️ Navigation
-- Unlimited skips
-- Smooth transitions between tracks
+- Dynamic retrieval of music tracks
+- Storage of song metadata (title, artist, artwork, and audio URL)
+- Track navigation (Next/Previous)
+- Real-time synchronization of playback data
 
-### 🔎 Search
-- Search songs by title or artist
-- Instant filtering results
+---
 
-### 🎨 UI/UX
-- Dark Spotify-inspired interface
+# Frontend (React Native + Expo)
+
+## Music Player Features
+
+- Play and Pause controls
+- Seek functionality (scrubbing through tracks)
+- Loop mode
+- Automatic playback of the next track
+
+## Navigation
+
+- Unlimited track skipping
+- Smooth transitions between songs
+
+## Search
+
+- Search by song title
+- Search by artist name
+- Instant filtering of results
+
+## User Interface
+
+- Spotify-inspired dark theme
 - Clean and minimal design
 - Mobile-first experience
+- Responsive layout
 
 ---
 
+# Key Features
 
-
-## ⚙️ Key Highlights
-
-- 🎧 Fully functional Android APK built for personal use
-- ⚡ Fast and smooth audio playback
-- 🔄 Continuous auto-play experience
-- 🧪 Built for experimentation and iteration
-- 📦 Powered by Expo for rapid development
+- Fully functional Android application
+- Fast and smooth audio playback
+- Continuous auto-play experience
+- Built with Expo for rapid development
+- Backend powered by Supabase
+- Modern React Native architecture
 
 ---
 
-## 📦 Output
+# Tech Stack
 
-Compiled into an **Android APK** for personal daily use, enabling seamless offline experimentation and music playback.
+| Component | Technology |
+|----------|------------|
+| Mobile App | React Native |
+| Framework | Expo |
+| Backend | Supabase |
+| Language | JavaScript |
+| Audio Playback | Expo Audio APIs |
 
+---
 
+# Application Highlights
+
+- Spotify-inspired user experience
+- Dynamic music streaming
+- Responsive mobile interface
+- Efficient audio playback management
+- Real-time backend integration
+- Designed for experimentation and learning mobile application development
+
+---
+
+# Output
+
+The project has been compiled into an **Android APK** for personal use, providing a seamless music streaming experience while serving as a practical exploration of React Native, Expo, and Supabase.
